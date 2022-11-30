@@ -2,32 +2,46 @@ const ApiError = require("../error/ApiError");
 const { InfoCar } = require("../models/models.js");
 
 class InfoCarController {
-  async getInfoCar(req, res) {
-    const infoCars = await InfoCar.findAll();
-
-    return res.status(200).json(infoCars);
+  getInfoCar(req, res, next) {
+    InfoCar.findAll()
+      .then((infoCars) => {
+        return res.status(200).json(infoCars);
+      })
+      .catch(next);
   }
 
-  async createInfoCar(req, res) {
+  createInfoCar(req, res, next) {
     const { title, description, CarId } = req.body;
 
-    const infoCar = await InfoCar.create({ title, description, CarId });
-
-    return res.status(200).json(infoCar);
+    InfoCar.create({ title, description, CarId })
+      .then((infoCar) => {
+        return res.status(200).json(infoCar);
+      })
+      .catch((e) => {
+        if (e.name === "SequelizeDatabaseError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        if (e.name === "SequelizeValidationError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        next(e);
+      });
   }
 
-  async deleteInfoCard(req, res, next) {
+  deleteInfoCard(req, res, next) {
     const id = req.params.id;
 
-    if (!id) {
-      return next(ApiError.badRequest("Не задан ID"));
-    }
-
-    const infoCar = await InfoCar.destroy({
+    InfoCar.destroy({
       where: { id },
-    });
-
-    return res.status(200).json({ message: "Успешно удалено" });
+    })
+      .then(() => {
+        return res.status(200).json({ message: "Успешно удалено" });
+      })
+      .catch((e) => {
+        if (e.name === "SequelizeDatabaseError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+      });
   }
 }
 
