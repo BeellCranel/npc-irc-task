@@ -1,10 +1,9 @@
 const Router = require("express");
 const router = new Router();
+const CarController = require('../controllers/carController');
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "hello!" });
-});
-router.post("/");
-// router.delete('/:id');
+router.get("/", CarController.getCars);
+router.post("/", CarController.createCar);
+router.delete('/:id', CarController.deleteCar);
 
 module.exports = router;
