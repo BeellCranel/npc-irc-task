@@ -2,7 +2,7 @@
 
 ## postgres
 
-- для заполнения таблиц в базе данных используйте sql файл в корне репозитория 
+- для заполнения таблиц в базе данных используйте `db.sql` файл в корне репозитория
 
 ## клонирование репозитория
 
@@ -14,5 +14,14 @@
 - в терминале в корневой директории проекта зайтите в директорию `server` и установите зависимости командой `npm install`
 - в файле `db.js` в директории `server` укажите ваши параметры для подкючения к postgreSQL
 - в терминале в директории `server` используйте команду `npm run dev` для запуска сервера
+
+### api
+
+- get cars: `http://api/cars/`
+- post car: `http://api/cars/`
+- delete car: `http://api/cars/:id`
+- get infoCars: `http://api/info-cars/`
+- post infoCars: `http://api/info-cars/`
+- delete infoCars: `http://api/info-cars/:id`
 
 ## client
