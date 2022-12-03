@@ -8,26 +8,39 @@ import {
   faTableList,
   faIcons,
   faNewspaper,
+  faAngleDoubleRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 import logo from "../../vendor/img/reactlogo.png";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarOpen, sidebarOpenHandler }) => {
   return (
-    <div className="sidebar">
+    <div
+      className={clsx("sidebar", {
+        sidebar__opened: sidebarOpen,
+      })}
+    >
+      <div
+        className={clsx("sidebar__sticker", {
+          sidebar__stickerOpened: sidebarOpen,
+        })}
+        onClick={sidebarOpenHandler}
+      >
+        <FontAwesomeIcon icon={faAngleDoubleRight} />
+      </div>
       <div className="sidebar__background" />
       <div className="sidebar__wrapper">
         <img className="sidebar__logo" src={logo} alt="logo" />
         <div className="sidebar__title">technical task</div>
       </div>
-      <nav className="nav sidebar__nav">
-        <ul className="list">
+      <nav className="sidebar__nav">
+        <ul>
           <li>
             <NavLink
               to="/admin/tables"
               className={({ isActive }) =>
-                clsx("navLink", {
-                  navLink__active: isActive,
+                clsx({
+                  active: isActive,
                 })
               }
             >
@@ -39,8 +52,8 @@ const Sidebar = () => {
             <NavLink
               to="/admin/icons"
               className={({ isActive }) =>
-                clsx("navLink", {
-                  navLink__active: isActive,
+                clsx({
+                  active: isActive,
                 })
               }
             >
@@ -52,8 +65,8 @@ const Sidebar = () => {
             <NavLink
               to="/admin/typography"
               className={({ isActive }) =>
-                clsx("navLink", {
-                  navLink__active: isActive,
+                clsx({
+                  active: isActive,
                 })
               }
             >

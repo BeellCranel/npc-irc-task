@@ -1,0 +1,15 @@
+@import "../../styles/index";
+
+.header {
+    padding: 1.6rem 5%;
+    text-align: right;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    &__title {
+        font-size: $big-font-size;
+    }
+
+    @media screen and (min-width: 992px) {
+        padding: 1.6rem 10%;
+    }
+}
