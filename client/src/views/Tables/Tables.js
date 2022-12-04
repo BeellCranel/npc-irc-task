@@ -1,29 +1,32 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  useCallback,
-  memo,
-} from "react";
-import Block from "../../components/Block/Block";
-import { BASE_URL } from "../../api/api";
+import React, { useState, useMemo, useCallback } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-const MyComp = (params) => {
-  const renderCountRf = useRef(1);
+import { Block, Button, ButtonsGroup } from "../../ui-kit";
+import EditFormPopup from "../../components/EditFormPopup/EditFormPopup";
+import PostFormPopup from "../../components/PostFormPopup/PostFormPopup";
 
-  return <>{params.value}</>;
-};
-
-const Tables = () => {
-  const [rowData, setRowData] = useState();
-  const gridApi = useRef();
-
-  const [columnDefs, setColumnDefs] = useState([
+const Tables = ({
+  gridCarsApi,
+  carsData,
+  currentCar,
+  infoCarsData,
+  editPopupState,
+  openEditPopupStateHandler,
+  postPopupState,
+  openPostPopupStateHandler,
+  buttonsState,
+  setButtonsState,
+  deselectCars,
+  deleteCar,
+  onClose,
+  editCarSubmit,
+  postCarSubmit,
+}) => {
+  const [carsColumnDefs] = useState([
+    { field: "id" },
     { field: "name" },
     { field: "price" },
     { field: "type" },
@@ -31,50 +34,37 @@ const Tables = () => {
     { field: "buildDate" },
   ]);
 
-  const defaultColDef = useMemo(
-    () => ({
+  const [infoCarsColumnDefs] = useState([
+    { field: "CarId" },
+    { field: "title" },
+    { field: "description" },
+  ]);
+
+  const defaultColDef = useMemo(() => {
+    return {
       flex: 1,
       sortable: true,
       filter: true,
-      cellRenderer: memo(MyComp),
-    }),
-    []
-  );
-
-  const cellClickedListener = useCallback((e) => {
-    console.log("cellClicked", e);
-  });
-
-  const getCars = async () => {
-    try {
-      let result = await fetch(`${BASE_URL}/cars`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      let data = await result.json();
-      setRowData(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    getCars();
-    // setInterval(() => {
-    //   getCars();
-    // }, 3000);
+      resizable: true,
+      minWidth: 130,
+      wrapText: true,
+    };
   }, []);
-
-  // const pushMeClicked = useCallback((e) => {
-  //   gridApi.current.api.deselectAll();
-  // });
 
   return (
     <>
-      <Block>
+      <EditFormPopup
+        isOpen={editPopupState}
+        onClose={onClose}
+        currentCar={currentCar}
+        submitHandler={editCarSubmit}
+      />
+      <PostFormPopup
+        isOpen={postPopupState}
+        onClose={onClose}
+        submitHandler={postCarSubmit}
+      />
+      <Block title="Cars" subtitle="Here is a subtitle for this table">
         <div
           className="ag-theme-alpine"
           style={{
@@ -82,14 +72,53 @@ const Tables = () => {
           }}
         >
           <AgGridReact
-            ref={gridApi}
-            onCellClicked={cellClickedListener}
-            rowData={rowData}
-            columnDefs={columnDefs}
+            onRowClicked={(e) => setButtonsState(false)}
+            ref={gridCarsApi}
+            rowData={carsData}
+            columnDefs={carsColumnDefs}
+            animateRows={true}
+            rowSelection="single"
+            popupParent={document.body}
             defaultColDef={defaultColDef}
-            rowSelection="multiple"
+          />
+        </div>
+        <ButtonsGroup>
+          <Button onClick={openPostPopupStateHandler} type="button">
+            Post
+          </Button>
+          <Button
+            onClick={openEditPopupStateHandler}
+            type="button"
+            isDisabled={buttonsState}
+          >
+            Edit
+          </Button>
+          <Button onClick={deleteCar} type="button" isDisabled={buttonsState}>
+            Delete
+          </Button>
+          <Button
+            onClick={deselectCars}
+            type="button"
+            isDisabled={buttonsState}
+          >
+            Deselect
+          </Button>
+        </ButtonsGroup>
+      </Block>
+      <Block title="Cars info" subtitle="Here is a subtitle for this table">
+        <div
+          className="ag-theme-alpine"
+          style={{
+            height: "300px",
+          }}
+        >
+          <AgGridReact
+            rowData={infoCarsData}
+            columnDefs={infoCarsColumnDefs}
             animateRows={true}
             popupParent={document.body}
+            defaultColDef={defaultColDef}
+            rowHeight={120}
           />
         </div>
       </Block>
