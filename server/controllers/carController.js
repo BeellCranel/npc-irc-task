@@ -11,8 +11,37 @@ class CarController {
   }
 
   createCar(req, res, next) {
-    const { name, price, type, brand, buildDate } = req.body;
-    Car.create({ name, price, type, brand, buildDate })
+    const data = req.body;
+    Car.create({ ...data })
+      .then((car) => {
+        res.status(201).json(car);
+      })
+      .catch((e) => {
+        if (e.name === "SequelizeUniqueConstraintError") {
+          return next(
+            ApiError.conflictError("Машина с этим названием уже есть в базе")
+          );
+        }
+        if (e.name === "SequelizeDatabaseError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        if (e.name === "SequelizeValidationError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        next(e);
+      });
+  }
+
+  updateCar(req, res, next) {
+    const data = req.body;
+    const id = req.params.id;
+
+    Car.update(
+      { ...data },
+      {
+        where: { id },
+      }
+    )
       .then((car) => {
         res.status(201).json(car);
       })

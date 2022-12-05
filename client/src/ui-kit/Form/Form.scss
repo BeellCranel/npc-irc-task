@@ -1,12 +1,8 @@
-.offer-form {
+.form {
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-
-  &__radioGroup {
-    margin-top: 24px;
-  }
 
   &__submit {
     margin-top: 12px;
@@ -14,10 +10,9 @@
 }
 
 @media screen and (min-width: 525px) {
-  .offer-form {
+  .form {
     padding: 2rem 3rem;
 
-    &__radioGroup,
     &__submit {
       margin-top: 0;
     }

@@ -1,7 +1,7 @@
 @import "../../styles/";
 
-.offer-popup {
-  position: absolute;
+.popup {
+  position: fixed;
   top: 0;
   right: 0;
   width: 100%;
@@ -14,6 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateX(-10px);
 
   &__opened {
     opacity: 1;
@@ -23,7 +24,7 @@
 
   &__container {
     width: 560px;
-    max-width: 95%;
+    max-width: 80%;
     background-color: $base-light-background-color;
     border-radius: 10px;
     box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.6);
@@ -54,5 +55,10 @@
     text-align: center;
     color: $base-dark-font-color;
     font-size: calc(23px + 10 * ((100vw - 320px) / (1280 - 320)));
+  }
+
+  @media screen and (min-width: 992px) {
+    width: calc(100% - 260px);
+    transform: translateX(0);
   }
 }

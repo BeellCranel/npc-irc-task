@@ -1,8 +1,10 @@
 .buttonsGroup {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    gap: 5%;
-    padding: 1rem 5% 0;
-    box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 1rem 5% 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5%;
+  justify-content: space-around;
 }

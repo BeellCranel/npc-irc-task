@@ -7,19 +7,29 @@ import Tables from "../../views/Tables/Tables";
 import Icons from "../../views/Icons/Icons";
 import Typography from "../../views/Typography/Typography";
 
-import { getCars, getCarsInfo } from "../../api/";
+import {
+  postCar,
+  editCar,
+  deleteCar,
+  getCarsInfo,
+  postCarInfo,
+  editCarInfo,
+  deleteCarInfo,
+} from "../../api/";
 
 function App() {
   const [sidebarState, setSidebarState] = useState(false);
   const [editPopupState, setEditPopupState] = useState(false);
   const [postPopupState, setPostPopupState] = useState(false);
   const [buttonsState, setButtonsState] = useState(true);
-
-  const [carsData, setCarsData] = useState();
-  const [currentCar, setCurrentCar] = useState();
+  const [currentCarInfo, setCurrentCarInfo] = useState();
   const [infoCarsData, setInfoCarsData] = useState();
 
-  const gridCarsApi = useRef();
+  const gridApi = useRef();
+
+  useEffect(() => {
+    getCarsInfoHandler();
+  }, []);
 
   const closeAllPopup = () => {
     setEditPopupState(false);
@@ -38,8 +48,8 @@ function App() {
   };
 
   const openEditPopupStateHandler = () => {
-    const selectedNode = gridCarsApi.current.api.getSelectedNodes()[0];
-    setCurrentCar(selectedNode.data);
+    const selectedNode = gridApi.current.api.getSelectedNodes()[0];
+    setCurrentCarInfo(selectedNode.data);
     setEditPopupState(true);
   };
 
@@ -47,35 +57,68 @@ function App() {
     setPostPopupState(true);
   };
 
-  const deselectCars = () => {
-    const selectedNode = gridCarsApi.current.api.getSelectedNodes()[0];
-    console.log(selectedNode.data);
-    setButtonsState(true);
-    gridCarsApi.current.api.deselectAll();
-  };
-
-  const deleteCar = () => {
-    setButtonsState(true);
-    gridCarsApi.current.api.deselectAll();
-  };
-
-  useEffect(() => {
-    Promise.all([getCars(), getCarsInfo()])
-      .then(([carsData, infoCarsData]) => {
-        setCarsData(carsData);
+  const getCarsInfoHandler = () => {
+    getCarsInfo()
+      .then((infoCarsData) => {
         setInfoCarsData(infoCarsData);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  const editCarSubmit = (data) => {
-    alert("SUCCESS!! :-)\n\n" + JSON.stringify(data, null, 4));
   };
 
-  const postCarSubmit = (data) => {
-    alert("SUCCESS!! :-)\n\n" + JSON.stringify(data, null, 4));
+  const postCarInfoSubmit = (current, data) => {
+    postCarInfo(data)
+      .then((data) => {
+        getCarsInfoHandler();
+        closeAllPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const editCarInfoSubmit = (current, data) => {
+    let result = {};
+    if (data.editCarId !== current.CarId) {
+      result.CarId = data.editCarId;
+    } else if (data.editTitle !== current.title) {
+      result.title = data.editTitle;
+    } else if (data.editDescription !== current.description) {
+      result.description = data.editDescription;
+    } else {
+      closeAllPopup();
+      return;
+    }
+    editCarInfo(current.id, result)
+      .then((data) => {
+        getCarsInfoHandler();
+        closeAllPopup();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deleteCarInfoHandler = () => {
+    const selectedNode = gridApi.current.api.getSelectedNodes()[0];
+    const id = selectedNode.data.id;
+
+    deleteCarInfo(id)
+      .then(() => {
+        getCarsInfoHandler();
+        closeAllPopup();
+        setButtonsState(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deselectCarsInfo = () => {
+    setButtonsState(true);
+    setCurrentCarInfo(null);
+    gridApi.current.api.deselectAll();
   };
 
   return (
@@ -97,9 +140,8 @@ function App() {
               path="tables"
               element={
                 <Tables
-                  gridCarsApi={gridCarsApi}
-                  carsData={carsData}
-                  currentCar={currentCar}
+                  gridApi={gridApi}
+                  currentCarInfo={currentCarInfo}
                   infoCarsData={infoCarsData}
                   editPopupState={editPopupState}
                   openEditPopupStateHandler={openEditPopupStateHandler}
@@ -107,11 +149,11 @@ function App() {
                   openPostPopupStateHandler={openPostPopupStateHandler}
                   buttonsState={buttonsState}
                   setButtonsState={setButtonsState}
-                  deselectCars={deselectCars}
-                  deleteCar={deleteCar}
+                  deselectCarsInfo={deselectCarsInfo}
+                  deleteCarInfoHandler={deleteCarInfoHandler}
                   onClose={closeAllPopup}
-                  editCarSubmit={editCarSubmit}
-                  postCarSubmit={postCarSubmit}
+                  editCarInfoSubmit={editCarInfoSubmit}
+                  postCarInfoSubmit={postCarInfoSubmit}
                 />
               }
             />

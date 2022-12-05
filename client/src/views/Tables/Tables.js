@@ -8,10 +8,11 @@ import { Block, Button, ButtonsGroup } from "../../ui-kit";
 import EditFormPopup from "../../components/EditFormPopup/EditFormPopup";
 import PostFormPopup from "../../components/PostFormPopup/PostFormPopup";
 
+import { getCars } from "../../api";
+
 const Tables = ({
-  gridCarsApi,
-  carsData,
-  currentCar,
+  gridApi,
+  currentCarInfo,
   infoCarsData,
   editPopupState,
   openEditPopupStateHandler,
@@ -19,14 +20,31 @@ const Tables = ({
   openPostPopupStateHandler,
   buttonsState,
   setButtonsState,
-  deselectCars,
-  deleteCar,
+  deselectCarsInfo,
+  deleteCarInfoHandler,
   onClose,
-  editCarSubmit,
-  postCarSubmit,
+  editCarInfoSubmit,
+  postCarInfoSubmit,
 }) => {
   const [carsColumnDefs] = useState([
-    { field: "id" },
+    {
+      headerName: "ID",
+      maxWidth: 100,
+      valueGetter: "node.id",
+      cellRenderer: (props) => {
+        if (props.value !== undefined) {
+          return props.value;
+        } else {
+          return (
+            <img
+              src="https://www.ag-grid.com/example-assets/loading.gif"
+              alt="loader"
+            />
+          );
+        }
+      },
+    },
+    { headerName: "Car Id", field: "id" },
     { field: "name" },
     { field: "price" },
     { field: "type" },
@@ -40,7 +58,16 @@ const Tables = ({
     { field: "description" },
   ]);
 
-  const defaultColDef = useMemo(() => {
+  const defaultColDefCars = useMemo(() => {
+    return {
+      flex: 1,
+      resizable: true,
+      minWidth: 130,
+      wrapText: true,
+    };
+  }, []);
+
+  const defaultColDefCarsInfo = useMemo(() => {
     return {
       flex: 1,
       sortable: true,
@@ -51,35 +78,80 @@ const Tables = ({
     };
   }, []);
 
+  const onGridReady = (params) => {
+    getCars()
+      .then((data) => {
+        const dataSource = {
+          rowCount: undefined,
+          getRows: (params) => {
+            // To make the demo look real, wait for 500ms before returning
+            setTimeout(function () {
+              // take a slice of the total rows
+              const rowsThisPage = data.slice(params.startRow, params.endRow);
+              // if on or after the last page, work out the last row.
+              let lastRow = -1;
+              if (data.length <= params.endRow) {
+                lastRow = data.length;
+              }
+              // call the success callback
+              params.successCallback(rowsThisPage, lastRow);
+            }, 500);
+          },
+        };
+        params.api.setDatasource(dataSource);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <EditFormPopup
         isOpen={editPopupState}
         onClose={onClose}
-        currentCar={currentCar}
-        submitHandler={editCarSubmit}
+        currentCarInfo={currentCarInfo}
+        submitHandler={editCarInfoSubmit}
       />
       <PostFormPopup
         isOpen={postPopupState}
         onClose={onClose}
-        submitHandler={postCarSubmit}
+        submitHandler={postCarInfoSubmit}
       />
       <Block title="Cars" subtitle="Here is a subtitle for this table">
         <div
           className="ag-theme-alpine"
           style={{
-            height: "300px",
+            height: 400,
+          }}
+        >
+          <AgGridReact
+            rowModelType={"infinite"}
+            onGridReady={onGridReady}
+            columnDefs={carsColumnDefs}
+            animateRows={true}
+            defaultColDef={defaultColDefCars}
+          />
+        </div>
+      </Block>
+      <Block title="Cars info" subtitle="Here is a subtitle for this table">
+        <div
+          className="ag-theme-alpine"
+          style={{
+            height: 600,
           }}
         >
           <AgGridReact
             onRowClicked={(e) => setButtonsState(false)}
-            ref={gridCarsApi}
-            rowData={carsData}
-            columnDefs={carsColumnDefs}
+            ref={gridApi}
+            rowData={infoCarsData}
+            rowModelType="clientSide"
+            columnDefs={infoCarsColumnDefs}
             animateRows={true}
             rowSelection="single"
             popupParent={document.body}
-            defaultColDef={defaultColDef}
+            defaultColDef={defaultColDefCarsInfo}
+            rowHeight={120}
           />
         </div>
         <ButtonsGroup>
@@ -93,34 +165,21 @@ const Tables = ({
           >
             Edit
           </Button>
-          <Button onClick={deleteCar} type="button" isDisabled={buttonsState}>
+          <Button
+            onClick={deleteCarInfoHandler}
+            type="button"
+            isDisabled={buttonsState}
+          >
             Delete
           </Button>
           <Button
-            onClick={deselectCars}
+            onClick={deselectCarsInfo}
             type="button"
             isDisabled={buttonsState}
           >
             Deselect
           </Button>
         </ButtonsGroup>
-      </Block>
-      <Block title="Cars info" subtitle="Here is a subtitle for this table">
-        <div
-          className="ag-theme-alpine"
-          style={{
-            height: "300px",
-          }}
-        >
-          <AgGridReact
-            rowData={infoCarsData}
-            columnDefs={infoCarsColumnDefs}
-            animateRows={true}
-            popupParent={document.body}
-            defaultColDef={defaultColDef}
-            rowHeight={120}
-          />
-        </div>
       </Block>
     </>
   );

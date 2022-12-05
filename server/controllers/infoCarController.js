@@ -11,11 +11,35 @@ class InfoCarController {
   }
 
   createInfoCar(req, res, next) {
-    const { title, description, CarId } = req.body;
+    const data = req.body;
 
-    InfoCar.create({ title, description, CarId })
+    InfoCar.create({ ...data })
       .then((infoCar) => {
         return res.status(200).json(infoCar);
+      })
+      .catch((e) => {
+        if (e.name === "SequelizeDatabaseError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        if (e.name === "SequelizeValidationError") {
+          return next(ApiError.badRequest("Переданы некоректные данные"));
+        }
+        next(e);
+      });
+  }
+
+  updateInfoCar(req, res, next) {
+    const data = req.body;
+    const id = req.params.id;
+
+    InfoCar.update(
+      { ...data },
+      {
+        where: { id },
+      }
+    )
+      .then((infoCar) => {
+        res.status(201).json(infoCar);
       })
       .catch((e) => {
         if (e.name === "SequelizeDatabaseError") {
