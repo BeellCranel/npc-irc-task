@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { Form } from "../../ui-kit";
 
-const EditFormPopup = ({ isOpen, onClose, currentCarInfo, submitHandler }) => {
+const EditFormPopup = ({ isOpen, onClose, currentCarInfo, submitHandler, carsIdData }) => {
   const inputs = [
     {
       label: "Car Id",
       name: "editCarId",
-      type: "text",
+      type: "select",
     },
     {
       label: "Title",
@@ -21,7 +21,7 @@ const EditFormPopup = ({ isOpen, onClose, currentCarInfo, submitHandler }) => {
     {
       label: "Description",
       name: "editDescription",
-      type: "text",
+      type: "textarea",
     },
   ];
   return (
@@ -38,6 +38,7 @@ const EditFormPopup = ({ isOpen, onClose, currentCarInfo, submitHandler }) => {
             currentData={currentCarInfo}
             submitHandler={submitHandler}
             inputs={inputs}
+            carsIdData={carsIdData}
           />
         </div>
       </div>

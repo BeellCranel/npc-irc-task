@@ -7,12 +7,12 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 import { Form } from "../../ui-kit";
 
-const PostFormPopup = ({ isOpen, onClose, submitHandler }) => {
+const PostFormPopup = ({ isOpen, onClose, submitHandler, carsIdData }) => {
   const inputs = [
     {
       label: "Car Id",
       name: "CarId",
-      type: "text",
+      type: "select",
     },
     {
       label: "Title",
@@ -22,7 +22,7 @@ const PostFormPopup = ({ isOpen, onClose, submitHandler }) => {
     {
       label: "Description",
       name: "description",
-      type: "text",
+      type: "textarea",
     },
   ];
   return (
@@ -38,6 +38,7 @@ const PostFormPopup = ({ isOpen, onClose, submitHandler }) => {
             onClose={onClose}
             submitHandler={submitHandler}
             inputs={inputs}
+            carsIdData={carsIdData}
           />
         </div>
       </div>

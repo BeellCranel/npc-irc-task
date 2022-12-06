@@ -13,6 +13,7 @@ import { getCars } from "../../api";
 const Tables = ({
   gridApi,
   currentCarInfo,
+  carsIdData,
   infoCarsData,
   editPopupState,
   openEditPopupStateHandler,
@@ -31,18 +32,18 @@ const Tables = ({
       headerName: "ID",
       maxWidth: 100,
       valueGetter: "node.id",
-      cellRenderer: (props) => {
-        if (props.value !== undefined) {
-          return props.value;
-        } else {
-          return (
-            <img
-              src="https://www.ag-grid.com/example-assets/loading.gif"
-              alt="loader"
-            />
-          );
-        }
-      },
+      // cellRenderer: (props) => {
+      //   // if (props.value !== undefined) {
+      //   //   return props.value;
+      //   // } else {
+      //   //   return (
+      //   //     <img
+      //   //       src="https://www.ag-grid.com/example-assets/loading.gif"
+      //   //       alt="loader"
+      //   //     />
+      //   //   );
+      //   // }
+      // },
     },
     { headerName: "Car Id", field: "id" },
     { field: "name" },
@@ -73,7 +74,6 @@ const Tables = ({
       sortable: true,
       filter: true,
       resizable: true,
-      minWidth: 130,
       wrapText: true,
     };
   }, []);
@@ -112,11 +112,13 @@ const Tables = ({
         onClose={onClose}
         currentCarInfo={currentCarInfo}
         submitHandler={editCarInfoSubmit}
+        carsIdData={carsIdData}
       />
       <PostFormPopup
         isOpen={postPopupState}
         onClose={onClose}
         submitHandler={postCarInfoSubmit}
+        carsIdData={carsIdData}
       />
       <Block title="Cars" subtitle="Here is a subtitle for this table">
         <div

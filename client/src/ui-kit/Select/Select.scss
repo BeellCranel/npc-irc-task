@@ -1,11 +1,12 @@
 @import "../../styles/";
 
-.input {
+.select {
   $this: &;
   display: flex;
   align-items: center;
-  padding: 18px 40px 18px 12px;
-  width: 100%;
+  padding: 18px 20px 18px 80px;
+  width: fit-content;
+  height: 56px;
   background-color: $color-bg-input;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -15,6 +16,7 @@
 
   &:hover {
     background-color: $color-bg-input-hover;
+    cursor: pointer;
   }
 
   &#{$this}__error {
@@ -26,7 +28,6 @@
   }
 
   &#{$this}__active {
-    width: 100% !important;
     border: 1px solid rgba(0, 0, 0, 0.54) !important;
     color: $base-dark-font-color !important;
     background-color: $base-light-background-color !important;
@@ -37,7 +38,14 @@
     }
   }
 
-  @media screen and (min-width: 525px) {
-    padding: 18px 40px 18px 73px;
+  .option {
+    border-radius: 4px;
+    padding: 0 4px 1px;
+    display: flex;
+    justify-content: center;
+
+    &__def {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
   }
 }

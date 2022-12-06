@@ -8,6 +8,7 @@ import Icons from "../../views/Icons/Icons";
 import Typography from "../../views/Typography/Typography";
 
 import {
+  getCars,
   postCar,
   editCar,
   deleteCar,
@@ -23,11 +24,19 @@ function App() {
   const [postPopupState, setPostPopupState] = useState(false);
   const [buttonsState, setButtonsState] = useState(true);
   const [currentCarInfo, setCurrentCarInfo] = useState();
+  const [carsIdData, setCarsIdData] = useState();
   const [infoCarsData, setInfoCarsData] = useState();
 
   const gridApi = useRef();
 
   useEffect(() => {
+    getCars()
+      .then((data) => {
+        setCarsIdData(data.map((item) => item.id));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     getCarsInfoHandler();
   }, []);
 
@@ -142,6 +151,7 @@ function App() {
                 <Tables
                   gridApi={gridApi}
                   currentCarInfo={currentCarInfo}
+                  carsIdData={carsIdData}
                   infoCarsData={infoCarsData}
                   editPopupState={editPopupState}
                   openEditPopupStateHandler={openEditPopupStateHandler}

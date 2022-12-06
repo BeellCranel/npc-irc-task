@@ -1,7 +1,7 @@
 import React from "react";
 import "./FormField.scss";
 import clsx from "clsx";
-import { Input } from "../../ui-kit";
+import { Input, Select, TextArea } from "../../ui-kit";
 
 export const FormField = ({
   className,
@@ -14,6 +14,8 @@ export const FormField = ({
   isRequired,
   onBlur,
   onFocus,
+  currentData,
+  carsIdData,
 }) => {
   const renderInput = () => {
     return (
@@ -39,19 +41,71 @@ export const FormField = ({
         fieldSet__active: isFocused,
       })}
     >
-      <label className="formField__label" htmlFor={name}>
-        {label}
-        {isRequired && <span className="formField__labelRequired"> *</span>}
-      </label>
       {type === "text" && (
         <>
+          <label className="formField__label" htmlFor={name}>
+            {label}
+            {isRequired && <span className="formField__labelRequired"> *</span>}
+          </label>
           {renderInput()}
           {error && <div className="formField__errorMessage">{error}</div>}
         </>
       )}
       {type === "date" && (
         <>
+          <label className="formField__label" htmlFor={name}>
+            {label}
+            {isRequired && <span className="formField__labelRequired"> *</span>}
+          </label>
           {renderInput()}
+          {error && <div className="formField__errorMessage">{error}</div>}
+        </>
+      )}
+      {type === "textarea" && (
+        <>
+          <label
+            className="formField__label formField__label_type_textarea"
+            htmlFor={name}
+          >
+            {label}
+            {isRequired && <span className="formField__labelRequired"> *</span>}
+          </label>
+          <TextArea
+            className={clsx({
+              TextArea__active: isFocused,
+            })}
+            {...(register ? register(name) : register)}
+            name={name}
+            error={error}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+          {error && <div className="formField__errorMessage">{error}</div>}
+        </>
+      )}
+      {type === "select" && (
+        <>
+          <label
+            className="formField__label formField__label_type_select"
+            htmlFor={name}
+          >
+            {label}
+            {isRequired && <span className="formField__labelRequired"> *</span>}
+          </label>
+          <Select
+            className={clsx({
+              select__active: isFocused,
+              select__error: error,
+            })}
+            {...(register ? register(name) : register)}
+            error={error}
+            name={name}
+            type={type}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            currentData={currentData}
+            carsIdData={carsIdData}
+          />
           {error && <div className="formField__errorMessage">{error}</div>}
         </>
       )}

@@ -7,18 +7,21 @@ import "./Form.scss";
 import { Button, FormField } from "../";
 
 const schemaPostCarInfoApi = yup.object().shape({
-  CarId: yup.number().required("обязательно к заполнению"),
+  CarId: yup
+    .string()
+    .matches(/^(\d*)$/, "обязательно к заполнению")
+    .required("обязательно к заполнению"),
   title: yup.string().required("обязательно к заполнению"),
   description: yup.string().required("обязательно к заполнению"),
 });
 
 const schemaEditCarInfoApi = yup.object().shape({
-  editCarId: yup.number().required("обязательно к заполнению"),
+  editCarId: yup.string().required("обязательно к заполнению"),
   editTitle: yup.string().required("обязательно к заполнению"),
   editDescription: yup.string().required("обязательно к заполнению"),
 });
 
-export const Form = ({ name, currentData, submitHandler, inputs }) => {
+export const Form = ({ name, currentData, submitHandler, inputs, carsIdData }) => {
   const [isFocused, setIsFocused] = useState({
     name: false,
     price: false,
@@ -52,6 +55,8 @@ export const Form = ({ name, currentData, submitHandler, inputs }) => {
         isRequired
         onBlur={handleBlur}
         onFocus={handleFocus}
+        currentData={currentData}
+        carsIdData={carsIdData}
       />
     );
   };

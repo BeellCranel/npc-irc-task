@@ -1,8 +1,10 @@
 @import "../../styles/";
 
-.input {
+.TextArea {
   $this: &;
   display: flex;
+  width: 100%;
+  min-height: 120px;
   align-items: center;
   padding: 18px 40px 18px 12px;
   width: 100%;
@@ -17,7 +19,7 @@
     background-color: $color-bg-input-hover;
   }
 
-  &#{$this}__error {
+  &.TextArea__error {
     background-color: $color-light-red;
 
     &:hover {
@@ -30,14 +32,9 @@
     border: 1px solid rgba(0, 0, 0, 0.54) !important;
     color: $base-dark-font-color !important;
     background-color: $base-light-background-color !important;
-
-    input:hover,
-    input {
-      background-color: $base-light-background-color !important;
-    }
   }
+}
 
-  @media screen and (min-width: 525px) {
-    padding: 18px 40px 18px 73px;
-  }
+.TextArea:-webkit-autofill {
+  -webkit-background-clip: text;
 }
