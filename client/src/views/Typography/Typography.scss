@@ -1,0 +1,27 @@
+.typography-line {
+  padding-left: 15%;
+  margin-bottom: 35px;
+  position: relative;
+  display: block;
+  width: 100%;
+
+  span {
+    bottom: 10px;
+    color: #9a9a9a;
+    display: block;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 13px;
+    left: 5px;
+    position: absolute;
+    width: 260px;
+    text-transform: none;
+  }
+
+  small {
+    font-size: 60%;
+    color: #9a9a9a;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+}
