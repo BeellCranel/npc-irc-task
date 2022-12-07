@@ -2,11 +2,7 @@ import React from "react";
 import "./Typography.scss";
 
 import {
-  Badge,
-  Button,
   Card,
-  Navbar,
-  Nav,
   Container,
   Row,
   Col,

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "normalize.css";
-import "./styles/global.scss";
+import "./global.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import App from "./components/App/App";
