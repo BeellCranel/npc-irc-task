@@ -1,0 +1,30 @@
+.card {
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 30px;
+
+  .card-body {
+    padding: 15px 15px 10px 15px;
+  }
+  .card-header {
+    padding: 15px 15px 0;
+    background-color: #ffffff;
+    border-bottom: none !important;
+  }
+  .card-category {
+    font-size: 14px;
+    font-weight: 400;
+    color: #9a9a9a;
+    margin-bottom: 0px;
+
+    a {
+      color: #1dc7ea;
+      text-decoration: none;
+    }
+  }
+  .card-title {
+    margin: 0;
+    color: #333333;
+    font-weight: 300;
+  }
+}
