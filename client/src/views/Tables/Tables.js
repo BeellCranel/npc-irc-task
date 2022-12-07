@@ -29,21 +29,21 @@ const Tables = ({
 }) => {
   const [carsColumnDefs] = useState([
     {
-      headerName: "ID",
+      headerName: "Row number",
       maxWidth: 100,
       valueGetter: "node.id",
-      // cellRenderer: (props) => {
-      //   // if (props.value !== undefined) {
-      //   //   return props.value;
-      //   // } else {
-      //   //   return (
-      //   //     <img
-      //   //       src="https://www.ag-grid.com/example-assets/loading.gif"
-      //   //       alt="loader"
-      //   //     />
-      //   //   );
-      //   // }
-      // },
+      cellRenderer: (props) => {
+        if (props.value !== undefined) {
+          return props.value;
+        } else {
+          return (
+            <img
+              src="https://www.ag-grid.com/example-assets/loading.gif"
+              alt="loader"
+            />
+          );
+        }
+      },
     },
     { headerName: "Car Id", field: "id" },
     { field: "name" },
@@ -54,8 +54,8 @@ const Tables = ({
   ]);
 
   const [infoCarsColumnDefs] = useState([
-    { field: "CarId" },
-    { field: "title" },
+    { field: "CarId", maxWidth: 130 },
+    { field: "title", maxWidth: 200 },
     { field: "description" },
   ]);
 

@@ -88,16 +88,25 @@ function App() {
   };
 
   const editCarInfoSubmit = (current, data) => {
-    let result = {};
-    if (data.editCarId !== current.CarId) {
-      result.CarId = data.editCarId;
-    } else if (data.editTitle !== current.title) {
-      result.title = data.editTitle;
-    } else if (data.editDescription !== current.description) {
-      result.description = data.editDescription;
-    } else {
+    if (
+      (parseInt(data.editCarId) === current.CarId) &
+        (data.editTitle === current.title) &&
+      data.editDescription === current.description
+    ) {
       closeAllPopup();
       return;
+    }
+
+    let result = {};
+
+    if (parseInt(data.editCarId) !== current.CarId) {
+      result.CarId = parseInt(data.editCarId);
+    }
+    if (data.editTitle !== current.title) {
+      result.title = data.editTitle;
+    }
+    if (data.editDescription !== current.description) {
+      result.description = data.editDescription;
     }
     editCarInfo(current.id, result)
       .then((data) => {
